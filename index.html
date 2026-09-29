@@ -1,0 +1,84 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+	img {
+}
+body {
+    margin: 0;
+    font-family: Georgia, serif;
+}
+.hero {
+    height: 100vh;
+    background-image: url("images/avatar.png");
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-color: black;
+}
+
+.title {
+    position: absolute;
+    font-family: Arial, sans-serif;
+    font-weight: 300;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    font-weight: normal;
+    letter-spacing: 6px;
+    z-index: 2;
+}
+
+.title h1 {
+    font-size: 275px;
+    margin: 0;
+}
+
+.title p {
+    font-size: 120px;
+    margin: 0;
+}
+
+.title h2 {
+    font-size: 150px;
+    margin: 0;
+}
+.title a {
+    color: white;
+    text-decoration: none;
+    border: 1px solid white;
+    padding: 12px 25px;
+    display: inline-block;
+    margin-top: 25px;
+    transition: 0.3s;
+    border-radius: 3px;
+}
+.title a:hover {
+    background: white;
+    color: black;
+    transform: scale(1.05);
+}
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 1;
+}
+@media (max-width: 600px) {
+    .title h1 {
+        font-size: 60px;
+    }
+}
+    </style>
+</head>
+<div class="hero">
+	<div class="overlay"></div>
+
+<div class="title">
+    <h1>WELCOME</h1>
+    <p>TO</p>
+    <h2>W/M.TATTOO</h2>
+	<a href="mailto:paccankim3@gmail.com">Liên hệ với tôi</a>
+</div>
+</div>
+

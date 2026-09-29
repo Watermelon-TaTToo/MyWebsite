@@ -70,6 +70,31 @@ body {
     background: rgba(0, 0, 0, 0.25);
     z-index: 1;
 }
+.menu {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    z-index: 3;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+    margin-left: 30px;
+    transition: 0.3s;
+}
+
+.menu a:hover {
+    opacity: 0.6;
+}
+body {
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+body.fade-out {
+    opacity: 0;
+}
 @media (max-width: 600px) {
     .title h1 {
     font-size: 60px;
@@ -88,6 +113,11 @@ body {
 <body>
 <div class="hero">
 	<div class="overlay"></div>
+<nav class="menu">
+    <a href="index.html">HOME</a>
+    <a href="about.html">ABOUT</a>
+    <a href="contact.html">CONTACT</a>
+</nav>
 
 <div class="title">
     <h1>WELCOME</h1>
@@ -96,6 +126,19 @@ body {
 	<a href="mailto:paccankim3@gmail.com">Liên hệ với tôi</a>
 </div>
 </div>
+<script>
+document.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        document.body.classList.add("fade-out");
+
+        setTimeout(() => {
+            window.location.href = this.href;
+        }, 500);
+    });
+});
+</script>
 </body>
 </html>
 

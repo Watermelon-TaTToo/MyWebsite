@@ -64,24 +64,22 @@
 
         /* HERO */
         .hero {
-            min-height: 100vh;
-            position: relative;
-            display: flex;
-            align-items: flex-end;
-            overflow: hidden;
-        }
+    min-height: 100vh;
+    position: relative;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
 
-        .hero::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(to top, rgba(0,0,0,.88), rgba(0,0,0,.05) 65%),
-                url("images/hero-exact.jpg") center center / contain no-repeat;
-                background-color: #000;
-            filter: grayscale(100%);
-            
-        }
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("images/hero-exact.jpg") center center / contain no-repeat;
+    background-color: #000;
+}
         .hero-content { display: none; }
 
         .eyebrow {

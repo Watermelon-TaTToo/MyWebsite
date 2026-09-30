@@ -993,8 +993,55 @@
 
     if (!gallery || !count) return;
 
+
+    /* =========================
+       TẠO TRACK
+    ========================= */
+
     const slides = Array.from(gallery.children);
     const total = slides.length;
+
+    const track = document.createElement("div");
+
+    track.className = "gallery-track";
+
+    slides.forEach(slide => {
+        track.appendChild(slide);
+    });
+
+    gallery.appendChild(track);
+
+
+    /* =========================
+       STYLE CAROUSEL
+    ========================= */
+
+    gallery.style.display = "block";
+    gallery.style.width = "100%";
+    gallery.style.overflow = "hidden";
+    gallery.style.touchAction = "pan-y";
+    gallery.style.scrollSnapType = "none";
+    gallery.style.scrollBehavior = "auto";
+
+    track.style.display = "flex";
+    track.style.width = "100%";
+    track.style.transform = "translateX(0%)";
+    track.style.transition = "transform 420ms cubic-bezier(.22,.61,.36,1)";
+    track.style.willChange = "transform";
+
+
+    slides.forEach(slide => {
+
+        slide.style.flex = "0 0 100%";
+        slide.style.width = "100%";
+        slide.style.margin = "0";
+
+    });
+
+
+    /* =========================
+       STATE
+    ========================= */
 
     let index = 0;
     let moving = false;
@@ -1021,6 +1068,25 @@
 
 
     /* =========================
+       HIỂN THỊ ẢNH
+    ========================= */
+
+    function render(animate = true) {
+
+        track.style.transition =
+            animate
+                ? "transform 420ms cubic-bezier(.22,.61,.36,1)"
+                : "none";
+
+        track.style.transform =
+            `translateX(-${index * 100}%)`;
+
+        updateCount();
+
+    }
+
+
+    /* =========================
        CHUYỂN ẢNH
     ========================= */
 
@@ -1028,36 +1094,76 @@
 
         if (moving) return;
 
+
         /*
+            VÒNG LẶP TRỰC TIẾP
+
             1 -> 7
             7 -> 1
         */
 
+        let wrapped = false;
+
+
         if (newIndex < 0) {
-            newIndex = total - 1;
+
+            index = total - 1;
+            wrapped = true;
+
         }
 
-        if (newIndex >= total) {
-            newIndex = 0;
+        else if (newIndex >= total) {
+
+            index = 0;
+            wrapped = true;
+
         }
 
-        index = newIndex;
+        else {
+
+            index = newIndex;
+
+        }
+
+
+        /*
+            Nếu vòng từ đầu/cuối:
+            KHÔNG animate.
+
+            Nhảy thẳng sang ảnh cần tới.
+        */
+
+        if (wrapped) {
+
+            render(false);
+
+            /*
+                Cho trình duyệt nhận vị trí mới
+                rồi mới cho phép animation tiếp.
+            */
+
+            requestAnimationFrame(() => {
+
+                moving = false;
+
+            });
+
+            return;
+        }
+
+
+        /* Chuyển bình thường */
 
         moving = true;
 
-        gallery.style.scrollBehavior = "smooth";
-
-        gallery.scrollTo({
-            left: index * gallery.clientWidth,
-            behavior: "smooth"
-        });
-
-        updateCount();
+        render(true);
 
 
         setTimeout(() => {
+
             moving = false;
-        }, 400);
+
+        }, 430);
 
     }
 
@@ -1074,27 +1180,20 @@
 
 
     /* =========================
-       BAN ĐẦU
+       KHỞI TẠO
     ========================= */
 
-    gallery.style.scrollSnapType = "none";
-
-    gallery.scrollTo({
-        left: 0,
-        behavior: "auto"
-    });
-
-    updateCount();
+    render(false);
 
 
 
     /* =========================
-       MOBILE
+       MOBILE TOUCH
     ========================= */
 
     gallery.addEventListener(
         "touchstart",
-        (e) => {
+        e => {
 
             if (moving) return;
 
@@ -1110,7 +1209,7 @@
 
     gallery.addEventListener(
         "touchend",
-        (e) => {
+        e => {
 
             if (moving) return;
 
@@ -1124,7 +1223,7 @@
 
 
             /*
-                Bỏ qua nếu vuốt dọc
+                Không phải vuốt ngang
             */
 
             if (
@@ -1144,9 +1243,13 @@
             */
 
             if (dx < 0) {
+
                 next();
+
             } else {
+
                 previous();
+
             }
 
         },
@@ -1156,12 +1259,12 @@
 
 
     /* =========================
-       PC DRAG
+       PC MOUSE
     ========================= */
 
     gallery.addEventListener(
         "mousedown",
-        (e) => {
+        e => {
 
             if (e.button !== 0 || moving) return;
 
@@ -1179,7 +1282,7 @@
 
     window.addEventListener(
         "mousemove",
-        (e) => {
+        e => {
 
             if (!dragging) return;
 
@@ -1191,7 +1294,7 @@
 
     window.addEventListener(
         "mouseup",
-        (e) => {
+        e => {
 
             if (!dragging) return;
 
@@ -1204,9 +1307,7 @@
                 e.clientX - mouseStartX;
 
 
-            if (Math.abs(dx) < 50) {
-                return;
-            }
+            if (Math.abs(dx) < 50) return;
 
 
             /*
@@ -1218,27 +1319,61 @@
             */
 
             if (dx < 0) {
+
                 next();
+
             } else {
+
                 previous();
+
             }
 
         }
     );
 
 
-
     /* =========================
-       KHÔNG CHO ẢNH BỊ KÉO
+       KHÔNG KÉO ẢNH GỐC
     ========================= */
 
     gallery.addEventListener(
         "dragstart",
-        (e) => {
-            e.preventDefault();
-        }
+        e => e.preventDefault()
     );
 
+
+    /* =========================
+       KEYBOARD
+    ========================= */
+
+    gallery.setAttribute(
+        "tabindex",
+        "0"
+    );
+
+
+    gallery.addEventListener(
+        "keydown",
+        e => {
+
+            if (e.key === "ArrowLeft") {
+
+                e.preventDefault();
+
+                next();
+
+            }
+
+            if (e.key === "ArrowRight") {
+
+                e.preventDefault();
+
+                previous();
+
+            }
+
+        }
+    );
 
 
     /* =========================
@@ -1249,10 +1384,7 @@
         "resize",
         () => {
 
-            gallery.scrollTo({
-                left: index * gallery.clientWidth,
-                behavior: "auto"
-            });
+            render(false);
 
         }
     );

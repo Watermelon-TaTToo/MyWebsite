@@ -755,8 +755,8 @@
         const dy = t.clientY - startY;
         if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
 
-        // Kéo sang trái = ảnh tiếp theo; kéo sang phải = ảnh trước.
-        if (dx < 0) goTo(index + 1);
+        // Kéo sang phải = ảnh tiếp theo; kéo sang trái = ảnh trước.
+        if (dx > 0) goTo(index + 1);
         else goTo(index - 1);
     }, { passive: true });
 

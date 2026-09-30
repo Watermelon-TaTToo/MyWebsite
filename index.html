@@ -581,7 +581,6 @@
             <figure><img src="images/tattoo-07.jpg" alt="Tattoo artwork 07" draggable="false"></figure>
         </div>
         <div class="gallery-count" id="galleryCount">01 / 07</div>
-        <div class="gallery-hint">Vuốt sang phải để xem ảnh tiếp theo · sang trái để quay lại</div>
     </section>
 
     <section id="about">
@@ -756,8 +755,8 @@
         const dy = t.clientY - startY;
         if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
 
-        // Theo đúng yêu cầu: kéo sang phải = ảnh tiếp theo; kéo sang trái = ảnh trước.
-        if (dx > 0) goTo(index + 1);
+        // Kéo sang trái = ảnh tiếp theo; kéo sang phải = ảnh trước.
+        if (dx < 0) goTo(index + 1);
         else goTo(index - 1);
     }, { passive: true });
 

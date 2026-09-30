@@ -3,12 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Watermelon.TaTToo — tattoo nghệ thuật phong cách black & grey. Xem portfolio và gửi yêu cầu tư vấn.">
-    <title>Watermelon.TaTToo — Tattoo Studio</title>
+
+    <title>W/M.TATTOO — Tattoo Studio</title>
+
+    <meta
+        name="description"
+        content="W/M.TATTOO — Tattoo studio. Black & white tattoo artwork and booking."
+    >
 
     <style>
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         html {
@@ -16,34 +23,109 @@
         }
 
         body {
-            margin: 0;
             background: #050505;
-            color: #f5f5f5;
+            color: #fff;
             font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
         }
 
         a {
             color: inherit;
+            text-decoration: none;
         }
 
-        /* NAV */
+        button,
+        input,
+        textarea {
+            font: inherit;
+        }
+
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 700px;
+            background: #050505;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            background-image: url("images/hero-exact.jpg");
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: auto 100%;
+
+            z-index: 0;
+        }
+
+        /* Fade hero -> WORK */
+        .hero::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -1px;
+            height: 42%;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    rgba(5,5,5,0) 0%,
+                    rgba(5,5,5,.10) 18%,
+                    rgba(5,5,5,.38) 42%,
+                    rgba(5,5,5,.78) 68%,
+                    #050505 100%
+                );
+
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+
+        /* =========================
+           NAV
+        ========================= */
+
         .nav {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            padding: 22px 5vw;
+            right: 0;
+
+            z-index: 10;
+
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 10;
-            background: linear-gradient(to bottom, rgba(0,0,0,.78), transparent);
+
+            padding: 28px 5vw;
+
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .logo {
-            font-size: 20px;
-            letter-spacing: 4px;
             font-weight: 700;
+            letter-spacing: 3px;
         }
 
         .nav-links {
@@ -52,450 +134,379 @@
         }
 
         .nav-links a {
-            text-decoration: none;
-            font-size: 12px;
-            letter-spacing: 3px;
-            transition: .25s;
+            opacity: .75;
+            transition: opacity .25s ease;
         }
 
         .nav-links a:hover {
-            opacity: .45;
+            opacity: 1;
         }
 
-        /* HERO — dùng đúng ảnh mở đầu, giữ nguyên toàn bộ bố cục */
-        .hero {
-            min-height: 100vh;
-            min-height: 100svh;
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-            background: #000;
-            isolation: isolate;
-        }
 
-        .hero::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: url("images/hero-exact.jpg") center center / auto 100% no-repeat;
-            background-color: #000;
-            z-index: -2;
-        }
+        /* =========================
+           SECTIONS
+        ========================= */
 
-        /* Fade sâu: ảnh tan dần vào nền đen, không tạo đường cắt */
-        .hero::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: -1px;
-            height: 42%;
-            background: linear-gradient(
-                to bottom,
-                rgba(5,5,5,0) 0%,
-                rgba(5,5,5,.10) 18%,
-                rgba(5,5,5,.38) 42%,
-                rgba(5,5,5,.78) 68%,
-                #050505 100%
-            );
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .hero-content {
-            display: none;
-        }
-
-        .eyebrow {
-            font-size: 11px;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            opacity: .7;
-            margin-bottom: 20px;
-        }
-
-        .hero h1 {
-            margin: 0;
-            font-size: clamp(64px, 11vw, 170px);
-            line-height: .82;
-            letter-spacing: -5px;
-            font-weight: 700;
-        }
-
-        .hero h1 span {
-            display: block;
-            font-weight: 300;
-        }
-
-        .hero-text {
-            max-width: 540px;
-            margin: 30px 0 0;
-            line-height: 1.7;
-            color: #d0d0d0;
-        }
-
-        .button {
-            display: inline-block;
-            margin-top: 28px;
-            padding: 14px 24px;
-            border: 1px solid #fff;
-            text-decoration: none;
-            font-size: 12px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            transition: .25s;
-        }
-
-        .button:hover {
-            background: #fff;
-            color: #000;
-        }
-
-        /* SECTIONS */
         section {
-            padding: 120px 7vw;
+            position: relative;
         }
+
+        .section-inner {
+            width: min(1100px, 90%);
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: clamp(38px, 6vw, 80px);
+            line-height: .9;
+            letter-spacing: -3px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .section-subtitle {
+            margin-top: 18px;
+            color: #888;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+
+        /* =========================
+           PORTFOLIO
+        ========================= */
 
         #portfolio {
             position: relative;
+
             margin-top: -110px;
             padding-top: 35px;
+            padding-bottom: 120px;
+
             background: #050505;
+
             isolation: isolate;
         }
 
-        /* Lớp chuyển tiếp rất dài để WORK nằm trong vùng đen của hero */
         #portfolio::before {
             content: "";
+
             position: absolute;
             left: 0;
             right: 0;
             top: -170px;
+
             height: 180px;
-            background: linear-gradient(
-                to bottom,
-                rgba(5,5,5,0),
-                #050505
-            );
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    rgba(5,5,5,0),
+                    #050505
+                );
+
             pointer-events: none;
             z-index: -1;
         }
 
-        .section-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: end;
-            gap: 30px;
-            margin-bottom: 55px;
+        .portfolio-heading {
+            margin-bottom: 40px;
         }
 
-        .section-number {
-            font-size: 12px;
-            letter-spacing: 4px;
-            color: #777;
+
+        /* =========================
+           CAROUSEL
+        ========================= */
+
+        .gallery-wrap {
+            position: relative;
+            width: 100%;
         }
 
-        h2 {
-            margin: 0;
-            font-size: clamp(42px, 7vw, 90px);
-            letter-spacing: -3px;
-            line-height: .95;
-        }
-
-        .section-intro {
-            max-width: 430px;
-            color: #aaa;
-            line-height: 1.7;
-        }
-
-        /* PORTFOLIO — 1 ảnh / lần, vuốt để đổi ảnh */
         .gallery {
             position: relative;
-            width: min(100%, 900px);
+
+            width: min(900px, 100%);
             margin: 0 auto;
+
             display: flex;
+
             overflow-x: auto;
             overflow-y: hidden;
+
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
+
             scrollbar-width: none;
             -ms-overflow-style: none;
+
             overscroll-behavior-x: contain;
-            touch-action: pan-y;
+
             background: #050505;
+
             cursor: grab;
+
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .gallery::-webkit-scrollbar {
             display: none;
         }
 
-        .gallery:active {
+        .gallery.is-dragging {
             cursor: grabbing;
+            scroll-behavior: auto;
         }
 
         .gallery figure {
             flex: 0 0 100%;
             width: 100%;
+
             margin: 0;
+
             scroll-snap-align: center;
+
             overflow: hidden;
+
             background: #111;
         }
 
         .gallery img {
+            display: block;
+
             width: 100%;
             height: auto;
+
             max-height: 78vh;
+
             object-fit: contain;
-            display: block;
+
             filter: grayscale(100%);
+
             user-select: none;
             -webkit-user-drag: none;
-            transition: filter .4s ease;
+
+            transition:
+                filter .4s ease,
+                transform .5s ease;
         }
 
         .gallery figure:hover img {
             filter: grayscale(0%);
         }
 
-        .gallery-hint {
-            text-align: center;
-            margin-top: 18px;
-            color: #666;
+
+        /* =========================
+           CAROUSEL COUNT
+        ========================= */
+
+        .gallery-info {
+            width: min(900px, 100%);
+            margin: 20px auto 0;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
             font-size: 11px;
             letter-spacing: 3px;
+
+            color: #777;
+
             text-transform: uppercase;
         }
 
         .gallery-count {
-            text-align: center;
-            margin-top: 10px;
-            color: #888;
-            font-size: 12px;
-            letter-spacing: 3px;
+            color: #fff;
         }
 
-        /* ABOUT */
+        .gallery-hint {
+            opacity: .55;
+        }
+
+
+        /* =========================
+           ABOUT
+        ========================= */
+
+        #about {
+            padding: 120px 0;
+            border-top: 1px solid #171717;
+        }
+
         .about-grid {
             display: grid;
-            grid-template-columns: 1.2fr .8fr;
-            gap: 8vw;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
             align-items: start;
         }
 
-        .about-big {
-            font-size: clamp(30px, 4vw, 55px);
-            line-height: 1.15;
-            margin: 0;
-        }
-
-        .about-small {
+        .about-text {
             color: #999;
+            font-size: 16px;
             line-height: 1.8;
         }
 
-        .stats {
-            margin-top: 45px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            border-top: 1px solid #333;
-            border-bottom: 1px solid #333;
+        .about-text p + p {
+            margin-top: 22px;
         }
 
-        .stat {
-            padding: 25px 15px 25px 0;
-            border-right: 1px solid #333;
+        .about-list {
+            list-style: none;
+            border-top: 1px solid #222;
         }
 
-        .stat:last-child {
-            border-right: 0;
-            padding-left: 15px;
+        .about-list li {
+            padding: 17px 0;
+            border-bottom: 1px solid #222;
+
+            display: flex;
+            justify-content: space-between;
+
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        .stat strong {
-            display: block;
-            font-size: 30px;
-            margin-bottom: 7px;
-        }
-
-        .stat span {
-            font-size: 10px;
-            letter-spacing: 2px;
+        .about-list span:last-child {
             color: #777;
         }
 
-        /* BOOKING */
-        .booking {
-            background: #f2f2f2;
-            color: #080808;
-        }
 
-        .booking .section-intro {
-            color: #555;
+        /* =========================
+           BOOKING
+        ========================= */
+
+        #booking {
+            padding: 120px 0;
+            border-top: 1px solid #171717;
         }
 
         .booking-grid {
             display: grid;
-            grid-template-columns: .75fr 1.25fr;
-            gap: 8vw;
+            grid-template-columns: .8fr 1.2fr;
+            gap: 90px;
         }
 
-        .booking-note {
-            font-size: 18px;
-            line-height: 1.6;
+        .booking-intro {
+            color: #888;
+            font-size: 14px;
+            line-height: 1.8;
+            max-width: 400px;
         }
 
-        form {
-            display: grid;
-            gap: 22px;
+        .booking-form {
+            width: 100%;
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
+        .field {
+            margin-bottom: 25px;
         }
 
-        label {
+        .field label {
             display: block;
+
+            margin-bottom: 9px;
+
+            color: #777;
+
             font-size: 10px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 8px;
         }
 
-        input, select, textarea {
+        .field input,
+        .field textarea {
             width: 100%;
+
             border: 0;
-            border-bottom: 1px solid #999;
+            border-bottom: 1px solid #333;
+
             background: transparent;
-            padding: 12px 0;
-            font: inherit;
-            color: #111;
+            color: #fff;
+
+            padding: 13px 0;
+
             outline: none;
+
+            transition: border-color .25s ease;
         }
 
-        input:focus, select:focus, textarea:focus {
-            border-bottom-color: #000;
+        .field input:focus,
+        .field textarea:focus {
+            border-color: #fff;
         }
 
-        textarea {
+        .field textarea {
             min-height: 130px;
             resize: vertical;
         }
 
-        .submit {
-            justify-self: start;
-            border: 1px solid #000;
-            background: #000;
-            color: #fff;
-            padding: 15px 28px;
-            cursor: pointer;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-size: 11px;
-            transition: .25s;
-        }
+        .submit-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
 
-        .submit:hover {
+            padding: 15px 28px;
+
+            border: 1px solid #fff;
+
             background: #fff;
             color: #000;
-        }
 
-        .form-help {
+            cursor: pointer;
+
             font-size: 11px;
-            color: #777;
-            line-height: 1.6;
+            font-weight: 700;
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            transition:
+                background .25s ease,
+                color .25s ease;
         }
 
-        /* FOOTER */
+        .submit-btn:hover {
+            background: transparent;
+            color: #fff;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
         footer {
-            padding: 50px 7vw;
+            border-top: 1px solid #171717;
+
+            padding: 35px 5vw;
+
             display: flex;
             justify-content: space-between;
-            gap: 30px;
-            border-top: 1px solid #222;
-            color: #777;
-            font-size: 11px;
+            align-items: center;
+
+            color: #666;
+
+            font-size: 10px;
             letter-spacing: 2px;
+
+            text-transform: uppercase;
         }
 
-        /* MOBILE */
-        @media (max-width: 700px) {
-            .nav {
-                padding: 18px 5vw;
-            }
 
-            .logo {
-                font-size: 15px;
-                letter-spacing: 3px;
-            }
-
-            .nav-links {
-                gap: 12px;
-            }
-
-            .nav-links a {
-                font-size: 9px;
-                letter-spacing: 1.5px;
-            }
-
-            .hero::after {
-                background:
-                    linear-gradient(
-                        to bottom,
-                        rgba(0,0,0,0) 42%,
-                        rgba(0,0,0,.10) 53%,
-                        rgba(0,0,0,.35) 66%,
-                        rgba(0,0,0,.72) 81%,
-                        #050505 96%,
-                        #050505 100%
-                    );
-            }
-
-            section {
-                padding: 80px 6vw;
-            }
-
-            .section-head,
-            .about-grid,
-            .booking-grid {
-                display: block;
-            }
-
-            .section-intro {
-                margin-top: 25px;
-            }
-
-            .gallery {
-                width: 100%;
-            }
-
-            .gallery img {
-                max-height: 70vh;
-            }
-
-            .stats {
-                margin-bottom: 50px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            footer {
-                display: block;
-                line-height: 2;
-            }
-        }
-    
+        /* =========================
+           MOBILE
+        ========================= */
 
         @media (max-width: 700px) {
-            /* Mobile: giữ nguyên toàn bộ ảnh nên không mất WELCOME / TO / W/M.TATTOO */
+
             .hero {
                 height: auto;
                 min-height: 0;
+
                 aspect-ratio: 1179 / 1572;
             }
 
@@ -506,268 +517,936 @@
 
             .hero::after {
                 height: 38%;
-                background: linear-gradient(
-                    to bottom,
-                    rgba(5,5,5,0) 0%,
-                    rgba(5,5,5,0) 25%,
-                    rgba(5,5,5,.12) 45%,
-                    rgba(5,5,5,.48) 68%,
-                    #050505 100%
-                );
+
+                background:
+                    linear-gradient(
+                        to bottom,
+                        rgba(5,5,5,0) 0%,
+                        rgba(5,5,5,0) 25%,
+                        rgba(5,5,5,.12) 45%,
+                        rgba(5,5,5,.48) 68%,
+                        #050505 100%
+                    );
             }
+
+            .nav {
+                padding: 20px 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
+                font-size: 9px;
+            }
+
+            .logo {
+                font-size: 10px;
+            }
+
 
             #portfolio {
                 margin-top: -70px;
                 padding-top: 25px;
+                padding-bottom: 90px;
             }
 
             #portfolio::before {
                 top: -100px;
                 height: 110px;
             }
-        }
 
+            .section-inner {
+                width: 88%;
+            }
+
+            .portfolio-heading {
+                margin-bottom: 25px;
+            }
+
+            .section-title {
+                letter-spacing: -2px;
+            }
+
+
+            .gallery {
+                width: 100%;
+            }
+
+            .gallery img {
+                max-height: none;
+                width: 100%;
+            }
+
+            .gallery-info {
+                margin-top: 14px;
+                font-size: 9px;
+                letter-spacing: 2px;
+            }
+
+            .gallery-hint {
+                display: none;
+            }
+
+
+            #about {
+                padding: 90px 0;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 45px;
+            }
+
+            .about-text {
+                font-size: 14px;
+            }
+
+
+            #booking {
+                padding: 90px 0;
+            }
+
+            .booking-grid {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+
+            footer {
+                padding: 28px 20px;
+
+                flex-direction: column;
+                gap: 10px;
+
+                text-align: center;
+            }
+        }
     </style>
 </head>
 
+
 <body>
 
-<header class="nav">
-    <div class="logo">W/M.TATTOO</div>
-    <nav class="nav-links">
-        <a href="#home">HOME</a>
-        <a href="#portfolio">WORK</a>
-        <a href="#about">ABOUT</a>
-        <a href="#booking">BOOKING</a>
-    </nav>
-</header>
 
-<main>
+    <!-- =========================
+         HERO
+    ========================= -->
 
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <div class="eyebrow">BLACK & GREY / TATTOO ART</div>
-            <h1>
-                WATERMELON
-                <span>TaTToo</span>
-            </h1>
-            <p class="hero-text">
-                Tattoo theo hướng tối giản, black & grey và lettering.
-                Mỗi hình xăm được tư vấn dựa trên vị trí, kích thước và ý tưởng riêng của khách.
-            </p>
-            <a class="button" href="#booking">Gửi yêu cầu</a>
-        </div>
-    </section>
+    <header class="hero" id="home">
+
+        <nav class="nav">
+
+            <a href="#home" class="logo">
+                W/M.TATTOO
+            </a>
+
+            <div class="nav-links">
+                <a href="#portfolio">Work</a>
+                <a href="#about">About</a>
+                <a href="#booking">Booking</a>
+            </div>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =========================
+         PORTFOLIO
+    ========================= -->
 
     <section id="portfolio">
-        <div class="section-head">
-            <div>
-                <div class="section-number">01 / SELECTED WORK</div>
-                <h2>WORK</h2>
+
+        <div class="section-inner">
+
+            <div class="portfolio-heading">
+
+                <h1 class="section-title">
+                    Work
+                </h1>
+
+                <p class="section-subtitle">
+                    Selected tattoo works
+                </p>
+
             </div>
-            <p class="section-intro">
-                Một số tác phẩm theo phong cách đen trắng, lettering và tattoo artwork.
-                Di chuột vào ảnh để xem hiệu ứng màu nhẹ.
-            </p>
+
+
+            <div class="gallery-wrap">
+
+                <div
+                    class="gallery"
+                    id="workGallery"
+                    aria-label="Bộ sưu tập tattoo"
+                >
+
+                    <figure>
+                        <img
+                            src="images/tattoo-01.jpg"
+                            alt="Tattoo artwork 01"
+                            draggable="false"
+                        >
+                    </figure>
+
+                    <figure>
+                        <img
+                            src="images/tattoo-02.jpg"
+                            alt="Tattoo artwork 02"
+                            draggable="false"
+                        >
+                    </figure>
+
+                    <figure>
+                        <img
+                            src="images/tattoo-03.jpg"
+                            alt="Tattoo artwork 03"
+                            draggable="false"
+                        >
+                    </figure>
+
+                    <figure>
+                        <img
+                            src="images/tattoo-04.jpg"
+                            alt="Tattoo artwork 04"
+                            draggable="false"
+                        >
+                    </figure>
+
+                    <figure>
+                        <img
+                            src="images/tattoo-05.jpg"
+                            alt="Tattoo artwork 05"
+                            draggable="false"
+                        >
+                    </figure>
+
+                    <figure>
+                        <img
+                            src="images/tattoo-06.jpg"
+                            alt="Tattoo artwork 06"
+                            draggable="false"
+                        >
+                    </figure>
+
+                    <figure>
+                        <img
+                            src="images/tattoo-07.jpg"
+                            alt="Tattoo artwork 07"
+                            draggable="false"
+                        >
+                    </figure>
+
+                </div>
+
+
+                <div class="gallery-info">
+
+                    <span class="gallery-hint">
+                        Drag / Swipe
+                    </span>
+
+                    <span
+                        class="gallery-count"
+                        id="galleryCount"
+                    >
+                        01 / 07
+                    </span>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="gallery" id="workGallery" aria-label="Bộ sưu tập tattoo">
-            <figure><img src="images/tattoo-01.jpg" alt="Tattoo artwork 01" draggable="false"></figure>
-            <figure><img src="images/tattoo-02.jpg" alt="Tattoo artwork 02" draggable="false"></figure>
-            <figure><img src="images/tattoo-03.jpg" alt="Tattoo artwork 03" draggable="false"></figure>
-            <figure><img src="images/tattoo-04.jpg" alt="Tattoo artwork 04" draggable="false"></figure>
-            <figure><img src="images/tattoo-05.jpg" alt="Tattoo artwork 05" draggable="false"></figure>
-            <figure><img src="images/tattoo-06.jpg" alt="Tattoo artwork 06" draggable="false"></figure>
-            <figure><img src="images/tattoo-07.jpg" alt="Tattoo artwork 07" draggable="false"></figure>
-        </div>
-        <div class="gallery-count" id="galleryCount">01 / 07</div>
     </section>
+
+
+
+    <!-- =========================
+         ABOUT
+    ========================= -->
 
     <section id="about">
-        <div class="section-head">
-            <div>
-                <div class="section-number">02 / THE STUDIO</div>
-                <h2>ABOUT</h2>
-            </div>
-        </div>
 
-        <div class="about-grid">
-            <p class="about-big">
-                Không chỉ là một hình xăm.
-                Đó là một dấu ấn được thiết kế riêng cho bạn.
-            </p>
+        <div class="section-inner">
 
-            <div class="about-small">
-                <p>
-                    Watermelon.TaTToo tập trung vào tattoo đen trắng,
-                    lettering và những thiết kế có tính cá nhân cao.
-                </p>
-                <p>
-                    Trước khi đặt lịch, bạn có thể gửi ý tưởng, vị trí,
-                    kích thước mong muốn và ảnh tham khảo. Mình sẽ xem
-                    yêu cầu và liên hệ lại để tư vấn.
-                </p>
+            <div class="about-grid">
 
-                <div class="stats">
-                    <div class="stat">
-                        <strong>01</strong>
-                        <span>Ý TƯỞNG</span>
-                    </div>
-                    <div class="stat">
-                        <strong>02</strong>
-                        <span>THIẾT KẾ</span>
-                    </div>
-                    <div class="stat">
-                        <strong>03</strong>
-                        <span>TATTOO</span>
-                    </div>
+                <div>
+
+                    <h2 class="section-title">
+                        About
+                    </h2>
+
+                    <p class="section-subtitle">
+                        W/M.TATTOO
+                    </p>
+
                 </div>
+
+
+                <div class="about-text">
+
+                    <p>
+                        Tattoo là cách kể một câu chuyện bằng hình ảnh,
+                        nằm lại trên cơ thể và thay đổi theo thời gian.
+                    </p>
+
+                    <p>
+                        W/M.TATTOO tập trung vào những thiết kế có cá tính,
+                        chú trọng đường nét, bố cục và sự phù hợp với cơ thể.
+                    </p>
+
+                    <ul class="about-list">
+
+                        <li>
+                            <span>Style</span>
+                            <span>Custom Tattoo</span>
+                        </li>
+
+                        <li>
+                            <span>Approach</span>
+                            <span>Personal</span>
+                        </li>
+
+                        <li>
+                            <span>Color</span>
+                            <span>Black / White</span>
+                        </li>
+
+                    </ul>
+
+                </div>
+
             </div>
+
         </div>
+
     </section>
 
-    <section class="booking" id="booking">
-        <div class="section-head">
-            <div>
-                <div class="section-number">03 / START A PROJECT</div>
-                <h2>BOOKING</h2>
+
+
+    <!-- =========================
+         BOOKING
+    ========================= -->
+
+    <section id="booking">
+
+        <div class="section-inner">
+
+            <div class="booking-grid">
+
+                <div>
+
+                    <h2 class="section-title">
+                        Booking
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Start your tattoo
+                    </p>
+
+                    <p class="booking-intro" style="margin-top:30px;">
+                        Gửi thông tin về ý tưởng tattoo của bạn.
+                        Mô tả vị trí, kích thước, phong cách và
+                        những yêu cầu đặc biệt nếu có.
+                    </p>
+
+                </div>
+
+
+                <form
+                    class="booking-form"
+                    action="ACTION_FORM_CUA_BAN"
+                    method="POST"
+                >
+
+                    <div class="field">
+
+                        <label for="name">
+                            Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="contact">
+                            Contact
+                        </label>
+
+                        <input
+                            type="text"
+                            id="contact"
+                            name="contact"
+                            placeholder="Facebook / Instagram / Phone"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="placement">
+                            Tattoo placement
+                        </label>
+
+                        <input
+                            type="text"
+                            id="placement"
+                            name="placement"
+                            placeholder="Arm / Back / Chest..."
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="size">
+                            Approximate size
+                        </label>
+
+                        <input
+                            type="text"
+                            id="size"
+                            name="size"
+                            placeholder="10cm / 15cm..."
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="message">
+                            Idea
+                        </label>
+
+                        <textarea
+                            id="message"
+                            name="message"
+                            placeholder="Tell me about your tattoo idea..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="submit-btn"
+                    >
+                        Send Inquiry
+                    </button>
+
+                </form>
+
             </div>
-            <p class="section-intro">
-                Điền thông tin bên dưới. Bạn chưa cần biết chính xác thiết kế;
-                chỉ cần mô tả ý tưởng, vị trí và kích thước mong muốn.
-            </p>
+
         </div>
 
-        <div class="booking-grid">
-            <div class="booking-note">
-                <strong>Hãy gửi ý tưởng của bạn.</strong>
-                <p>
-                    Mình sẽ dựa vào thông tin để trao đổi về concept,
-                    vị trí, kích thước và thời gian dự kiến.
-                </p>
-                
-                </p>
-            </div>
-
-            <!--
-                Để nhận dữ liệu thật:
-                1. Tạo form trên một dịch vụ như Formspree.
-                2. Thay ACTION_FORM_CUA_BAN bằng endpoint được cấp.
-                3. Không đưa mật khẩu/API key vào HTML.
-            -->
-            <form action="ACTION_FORM_CUA_BAN" method="POST">
-                <div class="form-row">
-                    <div>
-                        <label for="name">Họ tên</label>
-                        <input id="name" name="name" type="text" required>
-                    </div>
-
-                    <div>
-                        <label for="phone">Số điện thoại</label>
-                        <input id="phone" name="phone" type="tel" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div>
-                        <label for="email">Email</label>
-                        <input id="email" name="email" type="email">
-                    </div>
-
-                    <div>
-                        <label for="size">Kích thước dự kiến</label>
-                        <input id="size" name="size" type="text" placeholder="Ví dụ: 10–15 cm">
-                    </div>
-                </div>
-
-                <div>
-                    <label for="position">Vị trí xăm</label>
-                    <input id="position" name="position" type="text" placeholder="Ví dụ: cánh tay / lưng / ngực">
-                </div>
-
-                <div>
-                    <label for="style">Phong cách</label>
-                    <select id="style" name="style">
-                        <option value="">Chọn phong cách</option>
-                        <option>Black & Grey</option>
-                        <option>Lettering</option>
-                        <option>Fine Line</option>
-                        <option>Khác / chưa biết</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label for="idea">Mô tả ý tưởng</label>
-                    <textarea id="idea" name="idea" placeholder="Bạn muốn xăm gì? Có ý nghĩa gì? Có ảnh tham khảo không?"></textarea>
-                </div>
-
-                <button class="submit" type="submit">Gửi yêu cầu</button>
-            </form>
-        </div>
     </section>
 
-</main>
-
-<footer>
-    <div>W/M.TATTOO</div>
-    <div>BLACK & GREY / LETTERING / CUSTOM TATTOO</div>
-</footer>
 
 
-<script>
-(() => {
-    const gallery = document.getElementById('workGallery');
-    const count = document.getElementById('galleryCount');
-    if (!gallery || !count) return;
+    <!-- =========================
+         FOOTER
+    ========================= -->
 
-    const slides = [...gallery.querySelectorAll('figure')];
-    let index = 0;
-    let startX = 0;
-    let startY = 0;
-    let tracking = false;
+    <footer>
 
-    function goTo(i) {
-        index = Math.max(0, Math.min(slides.length - 1, i));
-        gallery.scrollTo({ left: gallery.clientWidth * index, behavior: 'smooth' });
-        count.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
-    }
+        <span>
+            © W/M.TATTOO
+        </span>
 
-    gallery.addEventListener('touchstart', (e) => {
-        const t = e.changedTouches[0];
-        startX = t.clientX;
-        startY = t.clientY;
-        tracking = true;
-    }, { passive: true });
+        <span>
+            Tattoo Studio
+        </span>
 
-    gallery.addEventListener('touchmove', (e) => {
-        if (!tracking) return;
-        const t = e.changedTouches[0];
-        const dx = t.clientX - startX;
-        const dy = t.clientY - startY;
-        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) e.preventDefault();
-    }, { passive: false });
+    </footer>
 
-    gallery.addEventListener('touchend', (e) => {
-        if (!tracking) return;
-        tracking = false;
-        const t = e.changedTouches[0];
-        const dx = t.clientX - startX;
-        const dy = t.clientY - startY;
-        if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
 
-        // Kéo sang phải = ảnh tiếp theo; kéo sang trái = ảnh trước.
-        if (dx > 0) goTo(index + 1);
-        else goTo(index - 1);
-    }, { passive: true });
 
-    gallery.addEventListener('scroll', () => {
-        const i = Math.round(gallery.scrollLeft / gallery.clientWidth);
-        if (i >= 0 && i < slides.length && i !== index) {
-            index = i;
-            count.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
-        }
-    });
-})();
-</script>
+    <!-- =========================
+         CAROUSEL SCRIPT
+         ONE SCRIPT ONLY
+    ========================= -->
+
+    <script>
+
+        (() => {
+
+            const gallery = document.getElementById("workGallery");
+            const count = document.getElementById("galleryCount");
+
+            if (!gallery || !count) return;
+
+
+            const originalSlides = Array.from(
+                gallery.children
+            );
+
+            const total = originalSlides.length;
+
+
+            /*
+                Tạo clone:
+
+                [07] [01] [02] [03] ... [07] [01]
+
+                Slide thật bắt đầu từ index 1.
+            */
+
+            const firstClone = originalSlides[0].cloneNode(true);
+            const lastClone = originalSlides[total - 1].cloneNode(true);
+
+            gallery.insertBefore(
+                lastClone,
+                gallery.firstChild
+            );
+
+            gallery.appendChild(firstClone);
+
+
+            let currentIndex = 1;
+
+            let isDragging = false;
+
+            let startX = 0;
+            let startScroll = 0;
+
+            let transitionTimer = null;
+
+
+            /* =========================
+               UTILITIES
+            ========================= */
+
+            function getWidth() {
+                return gallery.clientWidth;
+            }
+
+
+            function updateCount(index = currentIndex) {
+
+                let realIndex = index - 1;
+
+                if (realIndex < 0) {
+                    realIndex = total - 1;
+                }
+
+                if (realIndex >= total) {
+                    realIndex = 0;
+                }
+
+                count.textContent =
+                    String(realIndex + 1).padStart(2, "0")
+                    + " / "
+                    + String(total).padStart(2, "0");
+            }
+
+
+            function clearTransitionTimer() {
+
+                if (transitionTimer) {
+                    clearTimeout(transitionTimer);
+                    transitionTimer = null;
+                }
+
+            }
+
+
+            function resetTo(index) {
+
+                currentIndex = index;
+
+                gallery.scrollTo({
+                    left: index * getWidth(),
+                    behavior: "auto"
+                });
+
+                updateCount(index);
+
+            }
+
+
+            function scheduleLoopReset(index) {
+
+                clearTransitionTimer();
+
+
+                /*
+                    Chuyển tới clone trước/sau.
+                    Khi animation xong, nhảy invisible
+                    về slide thật tương ứng.
+                */
+
+                if (
+                    index !== 0 &&
+                    index !== total + 1
+                ) {
+                    return;
+                }
+
+
+                transitionTimer = setTimeout(() => {
+
+                    if (currentIndex !== index) {
+                        return;
+                    }
+
+                    if (index === 0) {
+                        resetTo(total);
+                    }
+
+                    if (index === total + 1) {
+                        resetTo(1);
+                    }
+
+                }, 480);
+
+            }
+
+
+            function moveTo(index, smooth = true) {
+
+                clearTransitionTimer();
+
+                currentIndex = index;
+
+                gallery.scrollTo({
+                    left: index * getWidth(),
+                    behavior: smooth ? "smooth" : "auto"
+                });
+
+                updateCount(index);
+
+                if (smooth) {
+                    scheduleLoopReset(index);
+                }
+
+            }
+
+
+            function next() {
+                moveTo(currentIndex + 1, true);
+            }
+
+
+            function previous() {
+                moveTo(currentIndex - 1, true);
+            }
+
+
+
+            /* =========================
+               INITIAL POSITION
+            ========================= */
+
+            requestAnimationFrame(() => {
+
+                gallery.scrollTo({
+                    left: getWidth(),
+                    behavior: "auto"
+                });
+
+                currentIndex = 1;
+
+                updateCount();
+
+            });
+
+
+
+            /* =========================
+               TOUCH / PHONE
+            ========================= */
+
+            let touchStartX = 0;
+            let touchStartY = 0;
+
+
+            gallery.addEventListener(
+                "touchstart",
+                (event) => {
+
+                    clearTransitionTimer();
+
+                    const touch = event.touches[0];
+
+                    touchStartX = touch.clientX;
+                    touchStartY = touch.clientY;
+
+                },
+                { passive: true }
+            );
+
+
+            gallery.addEventListener(
+                "touchend",
+                (event) => {
+
+                    const touch = event.changedTouches[0];
+
+                    const dx =
+                        touch.clientX - touchStartX;
+
+                    const dy =
+                        touch.clientY - touchStartY;
+
+
+                    /*
+                        Nếu kéo ngang rõ ràng
+                        thì mới chuyển slide.
+                    */
+
+                    if (
+                        Math.abs(dx) < 45 ||
+                        Math.abs(dx) < Math.abs(dy)
+                    ) {
+                        return;
+                    }
+
+
+                    /*
+                        Theo yêu cầu:
+
+                        Vuốt PHẢI  -> slide tiếp
+                        Vuốt TRÁI  -> slide trước
+                    */
+
+                    if (dx > 0) {
+                        next();
+                    } else {
+                        previous();
+                    }
+
+                },
+                { passive: true }
+            );
+
+
+
+            /* =========================
+               PC MOUSE DRAG
+            ========================= */
+
+            gallery.addEventListener(
+                "mousedown",
+                (event) => {
+
+                    if (event.button !== 0) return;
+
+                    clearTransitionTimer();
+
+                    isDragging = true;
+
+                    startX = event.clientX;
+
+                    startScroll = gallery.scrollLeft;
+
+                    gallery.classList.add("is-dragging");
+
+                    gallery.style.scrollSnapType = "none";
+
+                    event.preventDefault();
+
+                }
+            );
+
+
+            gallery.addEventListener(
+                "mousemove",
+                (event) => {
+
+                    if (!isDragging) return;
+
+                    const dx =
+                        event.clientX - startX;
+
+
+                    /*
+                        Kéo PHẢI -> scroll sang slide tiếp.
+                        Kéo TRÁI -> scroll về slide trước.
+                    */
+
+                    gallery.scrollLeft =
+                        startScroll + dx;
+
+                }
+            );
+
+
+            function finishMouseDrag(event) {
+
+                if (!isDragging) return;
+
+                isDragging = false;
+
+                gallery.classList.remove("is-dragging");
+
+                gallery.style.scrollSnapType =
+                    "x mandatory";
+
+
+                const dx =
+                    event.clientX - startX;
+
+
+                const width = getWidth();
+
+
+                /*
+                    Nếu kéo đủ xa:
+                    hướng kéo quyết định slide.
+
+                    Nếu kéo nhẹ:
+                    chọn slide gần nhất.
+                */
+
+                let target;
+
+
+                if (Math.abs(dx) >= 45) {
+
+                    target =
+                        currentIndex +
+                        (dx > 0 ? 1 : -1);
+
+                } else {
+
+                    target =
+                        Math.round(
+                            gallery.scrollLeft / width
+                        );
+
+                }
+
+
+                /*
+                    Giới hạn để không nhảy quá xa.
+                */
+
+                target = Math.max(
+                    0,
+                    Math.min(total + 1, target)
+                );
+
+
+                moveTo(target, true);
+
+            }
+
+
+            window.addEventListener(
+                "mouseup",
+                finishMouseDrag
+            );
+
+
+            gallery.addEventListener(
+                "mouseleave",
+                () => {
+
+                    /*
+                        Không kết thúc ngay khi chuột
+                        rời gallery vì người dùng có thể
+                        đang kéo ra ngoài vùng ảnh.
+                    */
+
+                }
+            );
+
+
+
+            /* =========================
+               PREVENT IMAGE DRAG
+            ========================= */
+
+            gallery.addEventListener(
+                "dragstart",
+                event => event.preventDefault()
+            );
+
+
+
+            /* =========================
+               RESIZE
+            ========================= */
+
+            let resizeTimer = null;
+
+
+            window.addEventListener(
+                "resize",
+                () => {
+
+                    clearTimeout(resizeTimer);
+
+                    resizeTimer = setTimeout(() => {
+
+                        gallery.scrollTo({
+                            left:
+                                currentIndex *
+                                getWidth(),
+
+                            behavior: "auto"
+                        });
+
+                    }, 100);
+
+                }
+            );
+
+
+
+            /* =========================
+               KEYBOARD
+            ========================= */
+
+            gallery.setAttribute(
+                "tabindex",
+                "0"
+            );
+
+
+            gallery.addEventListener(
+                "keydown",
+                (event) => {
+
+                    if (event.key === "ArrowRight") {
+
+                        event.preventDefault();
+
+                        next();
+
+                    }
+
+                    if (event.key === "ArrowLeft") {
+
+                        event.preventDefault();
+
+                        previous();
+
+                    }
+
+                }
+            );
+
+
+        })();
+
+    </script>
+
 </body>
 </html>

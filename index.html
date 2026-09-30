@@ -1,144 +1,592 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Watermelon.TaTToo — tattoo nghệ thuật phong cách black & grey. Xem portfolio và gửi yêu cầu tư vấn.">
+    <title>Watermelon.TaTToo — Tattoo Studio</title>
+
     <style>
-	img {
-}
-body {
-    margin: 0;
-    font-family: Georgia, serif;
-}
-.hero {
-    width: 100%;
-    height: 100vh;
-    background-image: url("images/avatar.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: black;
-    position: relative;
-}
+        * {
+            box-sizing: border-box;
+        }
 
-.title {
-    position: absolute;
-    width: 100%;
-    font-family: Arial, sans-serif;
-    font-weight: 300;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: white;
-    font-weight: normal;
-    letter-spacing: 3px;
-    z-index: 2;
-}
+        html {
+            scroll-behavior: smooth;
+        }
 
-.title h1 {
-    font-size: 275px;
-    margin: 0;
-}
+        body {
+            margin: 0;
+            background: #050505;
+            color: #f5f5f5;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-.title p {
-    font-size: 120px;
-    margin: 0;
-}
+        a {
+            color: inherit;
+        }
 
-.title h2 {
-    font-size: 150px;
-    margin: 0;
-}
-.title a {
-    color: white;
-    text-decoration: none;
-    border: 1px solid white;
-    padding: 12px 25px;
-    display: inline-block;
-    margin-top: 25px;
-    transition: 0.3s;
-    border-radius: 3px;
-}
-.title a:hover {
-    background: white;
-    color: black;
-    transform: scale(1.05);
-}
-.overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.25);
-    z-index: 1;
-}
-.menu {
-    position: absolute;
-    top: 30px;
-    right: 40px;
-    z-index: 3;
-}
+        /* NAV */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 22px 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            background: linear-gradient(to bottom, rgba(0,0,0,.78), transparent);
+        }
 
-.menu a {
-    color: white;
-    text-decoration: none;
-    margin-left: 30px;
-    transition: 0.3s;
-}
+        .logo {
+            font-size: 20px;
+            letter-spacing: 4px;
+            font-weight: 700;
+        }
 
-.menu a:hover {
-    opacity: 0.6;
-}
-body {
-    opacity: 1;
-    transition: opacity 0.5s;
-}
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
 
-body.fade-out {
-    opacity: 0;
-}
-@media (max-width: 600px) {
-    .title h1 {
-    font-size: 60px;
-}
+        .nav-links a {
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 3px;
+            transition: .25s;
+        }
 
-.title p {
-    font-size: 40px;
-}
+        .nav-links a:hover {
+            opacity: .45;
+        }
 
-.title h2 {
-    font-size: 50px;
-}
-}
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to top, rgba(0,0,0,.88), rgba(0,0,0,.05) 65%),
+                url("images/tattoo-01.jpg") center/cover no-repeat;
+            filter: grayscale(100%);
+            transform: scale(1.02);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 7vw 8vh;
+            max-width: 950px;
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            opacity: .7;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(64px, 11vw, 170px);
+            line-height: .82;
+            letter-spacing: -5px;
+            font-weight: 700;
+        }
+
+        .hero h1 span {
+            display: block;
+            font-weight: 300;
+        }
+
+        .hero-text {
+            max-width: 540px;
+            margin: 30px 0 0;
+            line-height: 1.7;
+            color: #d0d0d0;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 28px;
+            padding: 14px 24px;
+            border: 1px solid #fff;
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: .25s;
+        }
+
+        .button:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 120px 7vw;
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 30px;
+            margin-bottom: 55px;
+        }
+
+        .section-number {
+            font-size: 12px;
+            letter-spacing: 4px;
+            color: #777;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: clamp(42px, 7vw, 90px);
+            letter-spacing: -3px;
+            line-height: .95;
+        }
+
+        .section-intro {
+            max-width: 430px;
+            color: #aaa;
+            line-height: 1.7;
+        }
+
+        /* PORTFOLIO */
+        .gallery {
+            columns: 3 260px;
+            column-gap: 14px;
+        }
+
+        .gallery figure {
+            margin: 0 0 14px;
+            break-inside: avoid;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .gallery img {
+            width: 100%;
+            display: block;
+            filter: grayscale(100%);
+            transition: transform .6s ease, filter .4s ease;
+        }
+
+        .gallery figure:hover img {
+            transform: scale(1.04);
+            filter: grayscale(0%);
+        }
+
+        /* ABOUT */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 8vw;
+            align-items: start;
+        }
+
+        .about-big {
+            font-size: clamp(30px, 4vw, 55px);
+            line-height: 1.15;
+            margin: 0;
+        }
+
+        .about-small {
+            color: #999;
+            line-height: 1.8;
+        }
+
+        .stats {
+            margin-top: 45px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+        }
+
+        .stat {
+            padding: 25px 15px 25px 0;
+            border-right: 1px solid #333;
+        }
+
+        .stat:last-child {
+            border-right: 0;
+            padding-left: 15px;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .stat span {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #777;
+        }
+
+        /* BOOKING */
+        .booking {
+            background: #f2f2f2;
+            color: #080808;
+        }
+
+        .booking .section-intro {
+            color: #555;
+        }
+
+        .booking-grid {
+            display: grid;
+            grid-template-columns: .75fr 1.25fr;
+            gap: 8vw;
+        }
+
+        .booking-note {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        form {
+            display: grid;
+            gap: 22px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            border: 0;
+            border-bottom: 1px solid #999;
+            background: transparent;
+            padding: 12px 0;
+            font: inherit;
+            color: #111;
+            outline: none;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-bottom-color: #000;
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .submit {
+            justify-self: start;
+            border: 1px solid #000;
+            background: #000;
+            color: #fff;
+            padding: 15px 28px;
+            cursor: pointer;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 11px;
+            transition: .25s;
+        }
+
+        .submit:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .form-help {
+            font-size: 11px;
+            color: #777;
+            line-height: 1.6;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 50px 7vw;
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            border-top: 1px solid #222;
+            color: #777;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 700px) {
+            .nav {
+                padding: 18px 5vw;
+            }
+
+            .logo {
+                font-size: 15px;
+                letter-spacing: 3px;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-links a {
+                font-size: 9px;
+                letter-spacing: 1.5px;
+            }
+
+            .hero-content {
+                padding: 0 6vw 7vh;
+            }
+
+            .hero h1 {
+                letter-spacing: -2px;
+            }
+
+            section {
+                padding: 80px 6vw;
+            }
+
+            .section-head,
+            .about-grid,
+            .booking-grid {
+                display: block;
+            }
+
+            .section-intro {
+                margin-top: 25px;
+            }
+
+            .gallery {
+                columns: 2 150px;
+                column-gap: 8px;
+            }
+
+            .gallery figure {
+                margin-bottom: 8px;
+            }
+
+            .stats {
+                margin-bottom: 50px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                display: block;
+                line-height: 2;
+            }
+        }
     </style>
 </head>
+
 <body>
-<div class="hero">
-	<div class="overlay"></div>
-<nav class="menu">
-    <a href="index.html">HOME</a>
-    <a href="about.html">ABOUT</a>
-    <a href="contact.html">CONTACT</a>
-</nav>
 
-<div class="title">
-    <h1>WELCOME</h1>
-    <p>TO</p>
-    <h2>W/M.TATTOO</h2>
-	<a href="mailto:paccankim3@gmail.com">Liên hệ với tôi</a>
-</div>
-</div>
-<script>
-document.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", function(e) {
-        e.preventDefault();
+<header class="nav">
+    <div class="logo">W/M.TATTOO</div>
+    <nav class="nav-links">
+        <a href="#home">HOME</a>
+        <a href="#portfolio">WORK</a>
+        <a href="#about">ABOUT</a>
+        <a href="#booking">BOOKING</a>
+    </nav>
+</header>
 
-        document.body.classList.add("fade-out");
+<main>
 
-        setTimeout(() => {
-            window.location.href = this.href;
-        }, 500);
-    });
-});
-</script>
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="eyebrow">BLACK & GREY / TATTOO ART</div>
+            <h1>
+                WATERMELON
+                <span>TaTToo</span>
+            </h1>
+            <p class="hero-text">
+                Tattoo theo hướng tối giản, black & grey và lettering.
+                Mỗi hình xăm được tư vấn dựa trên vị trí, kích thước và ý tưởng riêng của khách.
+            </p>
+            <a class="button" href="#booking">Gửi yêu cầu</a>
+        </div>
+    </section>
+
+    <section id="portfolio">
+        <div class="section-head">
+            <div>
+                <div class="section-number">01 / SELECTED WORK</div>
+                <h2>WORK</h2>
+            </div>
+            <p class="section-intro">
+                Một số tác phẩm theo phong cách đen trắng, lettering và tattoo artwork.
+                Di chuột vào ảnh để xem hiệu ứng màu nhẹ.
+            </p>
+        </div>
+
+        <div class="gallery">
+            <figure><img src="images/tattoo-01.jpg" alt="Tattoo artwork 01"></figure>
+            <figure><img src="images/tattoo-02.jpg" alt="Tattoo artwork 02"></figure>
+            <figure><img src="images/tattoo-03.jpg" alt="Tattoo artwork 03"></figure>
+            <figure><img src="images/tattoo-04.jpg" alt="Tattoo artwork 04"></figure>
+            <figure><img src="images/tattoo-05.jpg" alt="Tattoo artwork 05"></figure>
+            <figure><img src="images/tattoo-06.jpg" alt="Tattoo artwork 06"></figure>
+            <figure><img src="images/tattoo-07.jpg" alt="Tattoo artwork 07"></figure>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="section-head">
+            <div>
+                <div class="section-number">02 / THE STUDIO</div>
+                <h2>ABOUT</h2>
+            </div>
+        </div>
+
+        <div class="about-grid">
+            <p class="about-big">
+                Không chỉ là một hình xăm.
+                Đó là một dấu ấn được thiết kế riêng cho bạn.
+            </p>
+
+            <div class="about-small">
+                <p>
+                    Watermelon.TaTToo tập trung vào tattoo đen trắng,
+                    lettering và những thiết kế có tính cá nhân cao.
+                </p>
+                <p>
+                    Trước khi đặt lịch, bạn có thể gửi ý tưởng, vị trí,
+                    kích thước mong muốn và ảnh tham khảo. Mình sẽ xem
+                    yêu cầu và liên hệ lại để tư vấn.
+                </p>
+
+                <div class="stats">
+                    <div class="stat">
+                        <strong>01</strong>
+                        <span>Ý TƯỞNG</span>
+                    </div>
+                    <div class="stat">
+                        <strong>02</strong>
+                        <span>THIẾT KẾ</span>
+                    </div>
+                    <div class="stat">
+                        <strong>03</strong>
+                        <span>TATTOO</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="booking" id="booking">
+        <div class="section-head">
+            <div>
+                <div class="section-number">03 / START A PROJECT</div>
+                <h2>BOOKING</h2>
+            </div>
+            <p class="section-intro">
+                Điền thông tin bên dưới. Bạn chưa cần biết chính xác thiết kế;
+                chỉ cần mô tả ý tưởng, vị trí và kích thước mong muốn.
+            </p>
+        </div>
+
+        <div class="booking-grid">
+            <div class="booking-note">
+                <strong>Hãy gửi ý tưởng của bạn.</strong>
+                <p>
+                    Mình sẽ dựa vào thông tin để trao đổi về concept,
+                    vị trí, kích thước và thời gian dự kiến.
+                </p>
+                <p class="form-help">
+                    Lưu ý: mẫu này là giao diện frontend. Để nhận dữ liệu
+                    thật từ khách hàng, cần kết nối form với Formspree,
+                    Google Forms hoặc một backend riêng.
+                </p>
+            </div>
+
+            <!--
+                Để nhận dữ liệu thật:
+                1. Tạo form trên một dịch vụ như Formspree.
+                2. Thay ACTION_FORM_CUA_BAN bằng endpoint được cấp.
+                3. Không đưa mật khẩu/API key vào HTML.
+            -->
+            <form action="ACTION_FORM_CUA_BAN" method="POST">
+                <div class="form-row">
+                    <div>
+                        <label for="name">Họ tên</label>
+                        <input id="name" name="name" type="text" required>
+                    </div>
+
+                    <div>
+                        <label for="phone">Số điện thoại</label>
+                        <input id="phone" name="phone" type="tel" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="email">Email</label>
+                        <input id="email" name="email" type="email">
+                    </div>
+
+                    <div>
+                        <label for="size">Kích thước dự kiến</label>
+                        <input id="size" name="size" type="text" placeholder="Ví dụ: 10–15 cm">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="position">Vị trí xăm</label>
+                    <input id="position" name="position" type="text" placeholder="Ví dụ: cánh tay / lưng / ngực">
+                </div>
+
+                <div>
+                    <label for="style">Phong cách</label>
+                    <select id="style" name="style">
+                        <option value="">Chọn phong cách</option>
+                        <option>Black & Grey</option>
+                        <option>Lettering</option>
+                        <option>Fine Line</option>
+                        <option>Khác / chưa biết</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="idea">Mô tả ý tưởng</label>
+                    <textarea id="idea" name="idea" placeholder="Bạn muốn xăm gì? Có ý nghĩa gì? Có ảnh tham khảo không?"></textarea>
+                </div>
+
+                <button class="submit" type="submit">Gửi yêu cầu</button>
+            </form>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div>W/M.TATTOO</div>
+    <div>BLACK & GREY / LETTERING / CUSTOM TATTOO</div>
+</footer>
+
 </body>
 </html>
-

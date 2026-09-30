@@ -569,6 +569,9 @@
 
             .gallery {
                 width: 100%;
+                overflow-x: hidden;
+                touch-action: pan-y;
+                scroll-snap-type: none;
             }
 
             .gallery img {
@@ -982,471 +985,294 @@
          ONE SCRIPT ONLY
     ========================= -->
 
-    <script>
+   <script>
+(() => {
+    const gallery = document.getElementById("workGallery");
+    const count = document.getElementById("galleryCount");
 
-        (() => {
+    if (!gallery || !count) return;
 
-            const gallery = document.getElementById("workGallery");
-            const count = document.getElementById("galleryCount");
+    const slides = Array.from(gallery.children);
+    const total = slides.length;
 
-            if (!gallery || !count) return;
+    // Clone để tạo vòng lặp vô hạn
+    const firstClone = slides[0].cloneNode(true);
+    const lastClone = slides[total - 1].cloneNode(true);
 
+    gallery.insertBefore(lastClone, gallery.firstChild);
+    gallery.appendChild(firstClone);
 
-            const originalSlides = Array.from(
-                gallery.children
-            );
+    let index = 1;
+    let moving = false;
 
-            const total = originalSlides.length;
+    let touchStartX = 0;
+    let touchStartY = 0;
 
+    let mouseStartX = 0;
+    let mouseStartScroll = 0;
+    let dragging = false;
 
-            /*
-                Tạo clone:
+    function width() {
+        return gallery.clientWidth;
+    }
 
-                [07] [01] [02] [03] ... [07] [01]
+    function realIndex(i) {
+        if (i === 0) return total;
+        if (i === total + 1) return 1;
+        return i;
+    }
 
-                Slide thật bắt đầu từ index 1.
-            */
+    function updateCount() {
+        count.textContent =
+            String(realIndex(index)).padStart(2, "0")
+            + " / "
+            + String(total).padStart(2, "0");
+    }
 
-            const firstClone = originalSlides[0].cloneNode(true);
-            const lastClone = originalSlides[total - 1].cloneNode(true);
+    function jump(i) {
+        index = i;
 
-            gallery.insertBefore(
-                lastClone,
-                gallery.firstChild
-            );
+        gallery.scrollTo({
+            left: i * width(),
+            behavior: "auto"
+        });
 
-            gallery.appendChild(firstClone);
+        updateCount();
+    }
 
+    function go(i) {
+        if (moving) return;
 
-            let currentIndex = 1;
+        moving = true;
+        index = i;
 
-            let isDragging = false;
+        gallery.scrollTo({
+            left: i * width(),
+            behavior: "smooth"
+        });
 
-            let startX = 0;
-            let startScroll = 0;
+        updateCount();
 
-            let transitionTimer = null;
+        setTimeout(() => {
 
-
-            /* =========================
-               UTILITIES
-            ========================= */
-
-            function getWidth() {
-                return gallery.clientWidth;
+            if (index === 0) {
+                jump(total);
             }
 
-
-            function updateCount(index = currentIndex) {
-
-                let realIndex = index - 1;
-
-                if (realIndex < 0) {
-                    realIndex = total - 1;
-                }
-
-                if (realIndex >= total) {
-                    realIndex = 0;
-                }
-
-                count.textContent =
-                    String(realIndex + 1).padStart(2, "0")
-                    + " / "
-                    + String(total).padStart(2, "0");
+            if (index === total + 1) {
+                jump(1);
             }
 
+            moving = false;
 
-            function clearTransitionTimer() {
+        }, 450);
+    }
 
-                if (transitionTimer) {
-                    clearTimeout(transitionTimer);
-                    transitionTimer = null;
-                }
+    function next() {
+        go(index + 1);
+    }
 
+    function previous() {
+        go(index - 1);
+    }
+
+
+    // Vị trí ban đầu
+    requestAnimationFrame(() => {
+        jump(1);
+    });
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    gallery.addEventListener(
+        "touchstart",
+        e => {
+
+            if (moving) return;
+
+            const t = e.touches[0];
+
+            touchStartX = t.clientX;
+            touchStartY = t.clientY;
+
+        },
+        { passive: true }
+    );
+
+
+    gallery.addEventListener(
+        "touchend",
+        e => {
+
+            if (moving) return;
+
+            const t = e.changedTouches[0];
+
+            const dx = t.clientX - touchStartX;
+            const dy = t.clientY - touchStartY;
+
+            // Không đủ dài hoặc đang kéo dọc
+            if (
+                Math.abs(dx) < 50 ||
+                Math.abs(dx) < Math.abs(dy)
+            ) {
+                return;
             }
 
-
-            function resetTo(index) {
-
-                currentIndex = index;
-
-                gallery.scrollTo({
-                    left: index * getWidth(),
-                    behavior: "auto"
-                });
-
-                updateCount(index);
-
+            // Vuốt phải = ảnh tiếp
+            if (dx > 0) {
+                next();
             }
 
-
-            function scheduleLoopReset(index) {
-
-                clearTransitionTimer();
-
-
-                /*
-                    Chuyển tới clone trước/sau.
-                    Khi animation xong, nhảy invisible
-                    về slide thật tương ứng.
-                */
-
-                if (
-                    index !== 0 &&
-                    index !== total + 1
-                ) {
-                    return;
-                }
-
-
-                transitionTimer = setTimeout(() => {
-
-                    if (currentIndex !== index) {
-                        return;
-                    }
-
-                    if (index === 0) {
-                        resetTo(total);
-                    }
-
-                    if (index === total + 1) {
-                        resetTo(1);
-                    }
-
-                }, 480);
-
+            // Vuốt trái = ảnh trước
+            else {
+                previous();
             }
 
+        },
+        { passive: true }
+    );
 
-            function moveTo(index, smooth = true) {
 
-                clearTransitionTimer();
+    /* =========================
+       PC
+    ========================= */
 
-                currentIndex = index;
+    gallery.addEventListener(
+        "mousedown",
+        e => {
 
-                gallery.scrollTo({
-                    left: index * getWidth(),
-                    behavior: smooth ? "smooth" : "auto"
-                });
+            if (e.button !== 0 || moving) return;
 
-                updateCount(index);
+            dragging = true;
 
-                if (smooth) {
-                    scheduleLoopReset(index);
-                }
+            mouseStartX = e.clientX;
+            mouseStartScroll = gallery.scrollLeft;
 
-            }
+            gallery.classList.add("is-dragging");
 
+            gallery.style.scrollSnapType = "none";
 
-            function next() {
-                moveTo(currentIndex + 1, true);
-            }
+            e.preventDefault();
+        }
+    );
 
 
-            function previous() {
-                moveTo(currentIndex - 1, true);
-            }
+    window.addEventListener(
+        "mousemove",
+        e => {
 
+            if (!dragging) return;
 
+            const dx = e.clientX - mouseStartX;
 
-            /* =========================
-               INITIAL POSITION
-            ========================= */
+            gallery.scrollLeft =
+                mouseStartScroll + dx;
 
-            requestAnimationFrame(() => {
+        }
+    );
 
-                gallery.scrollTo({
-                    left: getWidth(),
-                    behavior: "auto"
-                });
 
-                currentIndex = 1;
+    window.addEventListener(
+        "mouseup",
+        e => {
 
-                updateCount();
+            if (!dragging) return;
 
-            });
+            dragging = false;
 
+            gallery.classList.remove("is-dragging");
 
+            gallery.style.scrollSnapType =
+                "x mandatory";
 
-            /* =========================
-               TOUCH / PHONE
-            ========================= */
+            const dx =
+                e.clientX - mouseStartX;
 
-            let touchStartX = 0;
-            let touchStartY = 0;
 
+            // Kéo đủ xa
+            if (Math.abs(dx) >= 50) {
 
-            gallery.addEventListener(
-                "touchstart",
-                (event) => {
-
-                    clearTransitionTimer();
-
-                    const touch = event.touches[0];
-
-                    touchStartX = touch.clientX;
-                    touchStartY = touch.clientY;
-
-                },
-                { passive: true }
-            );
-
-
-            gallery.addEventListener(
-                "touchend",
-                (event) => {
-
-                    const touch = event.changedTouches[0];
-
-                    const dx =
-                        touch.clientX - touchStartX;
-
-                    const dy =
-                        touch.clientY - touchStartY;
-
-
-                    /*
-                        Nếu kéo ngang rõ ràng
-                        thì mới chuyển slide.
-                    */
-
-                    if (
-                        Math.abs(dx) < 45 ||
-                        Math.abs(dx) < Math.abs(dy)
-                    ) {
-                        return;
-                    }
-
-
-                    /*
-                        Theo yêu cầu:
-
-                        Vuốt PHẢI  -> slide tiếp
-                        Vuốt TRÁI  -> slide trước
-                    */
-
-                    if (dx > 0) {
-                        next();
-                    } else {
-                        previous();
-                    }
-
-                },
-                { passive: true }
-            );
-
-
-
-            /* =========================
-               PC MOUSE DRAG
-            ========================= */
-
-            gallery.addEventListener(
-                "mousedown",
-                (event) => {
-
-                    if (event.button !== 0) return;
-
-                    clearTransitionTimer();
-
-                    isDragging = true;
-
-                    startX = event.clientX;
-
-                    startScroll = gallery.scrollLeft;
-
-                    gallery.classList.add("is-dragging");
-
-                    gallery.style.scrollSnapType = "none";
-
-                    event.preventDefault();
-
-                }
-            );
-
-
-            gallery.addEventListener(
-                "mousemove",
-                (event) => {
-
-                    if (!isDragging) return;
-
-                    const dx =
-                        event.clientX - startX;
-
-
-                    /*
-                        Kéo PHẢI -> scroll sang slide tiếp.
-                        Kéo TRÁI -> scroll về slide trước.
-                    */
-
-                    gallery.scrollLeft =
-                        startScroll + dx;
-
-                }
-            );
-
-
-            function finishMouseDrag(event) {
-
-                if (!isDragging) return;
-
-                isDragging = false;
-
-                gallery.classList.remove("is-dragging");
-
-                gallery.style.scrollSnapType =
-                    "x mandatory";
-
-
-                const dx =
-                    event.clientX - startX;
-
-
-                const width = getWidth();
-
-
-                /*
-                    Nếu kéo đủ xa:
-                    hướng kéo quyết định slide.
-
-                    Nếu kéo nhẹ:
-                    chọn slide gần nhất.
-                */
-
-                let target;
-
-
-                if (Math.abs(dx) >= 45) {
-
-                    target =
-                        currentIndex +
-                        (dx > 0 ? 1 : -1);
-
+                if (dx > 0) {
+                    next();
                 } else {
-
-                    target =
-                        Math.round(
-                            gallery.scrollLeft / width
-                        );
-
+                    previous();
                 }
 
+                return;
+            }
 
-                /*
-                    Giới hạn để không nhảy quá xa.
-                */
 
-                target = Math.max(
-                    0,
-                    Math.min(total + 1, target)
+            // Kéo nhẹ -> về slide gần nhất
+            const nearest =
+                Math.round(
+                    gallery.scrollLeft / width()
                 );
 
+            go(nearest);
 
-                moveTo(target, true);
+        }
+    );
 
+
+    /* =========================
+       KHÔNG CHO ẢNH BỊ KÉO
+    ========================= */
+
+    gallery.addEventListener(
+        "dragstart",
+        e => e.preventDefault()
+    );
+
+
+    /* =========================
+       RESIZE
+    ========================= */
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            gallery.scrollTo({
+                left: index * width(),
+                behavior: "auto"
+            });
+
+        }
+    );
+
+
+    /* =========================
+       KEYBOARD
+    ========================= */
+
+    gallery.setAttribute(
+        "tabindex",
+        "0"
+    );
+
+    gallery.addEventListener(
+        "keydown",
+        e => {
+
+            if (e.key === "ArrowRight") {
+                e.preventDefault();
+                next();
             }
 
+            if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                previous();
+            }
 
-            window.addEventListener(
-                "mouseup",
-                finishMouseDrag
-            );
+        }
+    );
 
-
-            gallery.addEventListener(
-                "mouseleave",
-                () => {
-
-                    /*
-                        Không kết thúc ngay khi chuột
-                        rời gallery vì người dùng có thể
-                        đang kéo ra ngoài vùng ảnh.
-                    */
-
-                }
-            );
-
-
-
-            /* =========================
-               PREVENT IMAGE DRAG
-            ========================= */
-
-            gallery.addEventListener(
-                "dragstart",
-                event => event.preventDefault()
-            );
-
-
-
-            /* =========================
-               RESIZE
-            ========================= */
-
-            let resizeTimer = null;
-
-
-            window.addEventListener(
-                "resize",
-                () => {
-
-                    clearTimeout(resizeTimer);
-
-                    resizeTimer = setTimeout(() => {
-
-                        gallery.scrollTo({
-                            left:
-                                currentIndex *
-                                getWidth(),
-
-                            behavior: "auto"
-                        });
-
-                    }, 100);
-
-                }
-            );
-
-
-
-            /* =========================
-               KEYBOARD
-            ========================= */
-
-            gallery.setAttribute(
-                "tabindex",
-                "0"
-            );
-
-
-            gallery.addEventListener(
-                "keydown",
-                (event) => {
-
-                    if (event.key === "ArrowRight") {
-
-                        event.preventDefault();
-
-                        next();
-
-                    }
-
-                    if (event.key === "ArrowLeft") {
-
-                        event.preventDefault();
-
-                        previous();
-
-                    }
-
-                }
-            );
-
-
-        })();
-
-    </script>
+})();
+</script>
 
 </body>
 </html>

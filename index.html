@@ -284,79 +284,47 @@
         }
 
         .gallery {
-            position: relative;
+    position: relative;
+    width: min(900px, 100%);
+    margin: 0 auto;
+    overflow: hidden;
+    background: #050505;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y;
 
-            width: min(900px, 100%);
+    /* QUAN TRỌNG */
+    height: auto;
+    transition: height 420ms cubic-bezier(.22,.61,.36,1);
+}
 
-            margin: 0 auto;
+.gallery-track {
+    display: flex;
+    width: 100%;
+    transition: transform 420ms cubic-bezier(.22,.61,.36,1);
+    will-change: transform;
+}
 
-            display: block;
+.gallery figure {
+    flex: 0 0 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #050505;
+}
 
-            overflow: hidden;
-
-            background: #050505;
-
-            cursor: grab;
-
-            user-select: none;
-            -webkit-user-select: none;
-
-            touch-action: pan-y;
-        }
-
-        .gallery.is-dragging {
-            cursor: grabbing;
-        }
-
-        .gallery-track {
-            display: flex;
-
-            width: 100%;
-
-            transform: translateX(0);
-
-            transition:
-                transform 420ms cubic-bezier(
-                    .22,
-                    .61,
-                    .36,
-                    1
-                );
-
-            will-change: transform;
-        }
-
-        .gallery figure {
-            flex: 0 0 100%;
-
-            width: 100%;
-
-            margin: 0;
-
-            overflow: hidden;
-
-            background: #111;
-        }
-
-        .gallery img {
-            display: block;
-
-            width: 100%;
-            height: auto;
-
-            max-height: 78vh;
-
-            object-fit: contain;
-
-            filter: grayscale(100%);
-
-            user-select: none;
-
-            -webkit-user-drag: none;
-
-            transition:
-                filter .4s ease;
-        }
+.gallery img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+    filter: grayscale(100%);
+    user-select: none;
+    -webkit-user-drag: none;
+}
 
         .gallery figure:hover img {
             filter: grayscale(0%);
@@ -707,50 +675,32 @@
 
             /* GALLERY */
 
-            .gallery {
-                width: 100%;
-
-                overflow: hidden;
-
-                touch-action: pan-y;
-            }
-
-            .gallery-track {
-                transition:
-                    transform 380ms
-                    cubic-bezier(
-                        .22,
-                        .61,
-                        .36,
-                        1
-                    );
-            }
-.gallery figure {
+.gallery {
     width: 100%;
-    margin: 0;
     overflow: hidden;
-    background: #050505;
+    touch-action: pan-y;
 }
 
-.gallery img {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: none;
-  object-fit: contain;
+.gallery-track {
+    transition:
+        transform 380ms
+        cubic-bezier(
+            .22,
+            .61,
+            .36,
+            1
+        );
 }
 
-            .gallery-info {
-                margin-top: 14px;
+.gallery-info {
+    margin-top: 14px;
+    font-size: 9px;
+    letter-spacing: 2px;
+}
 
-                font-size: 9px;
-
-                letter-spacing: 2px;
-            }
-
-            .gallery-hint {
-                display: none;
-            }
+.gallery-hint {
+    display: none;
+}
 
 
             /* ABOUT */
@@ -1217,410 +1167,370 @@
          CAROUSEL
     ========================= -->
 
-    <script>
+  <script>
+const gallery = document.getElementById("workGallery");
+const count = document.getElementById("galleryCount");
 
-    (() => {
+const slides = Array.from(gallery.children);
+const total = slides.length;
 
-        const gallery =
-            document.getElementById(
-                "workGallery"
-            );
+const track = document.createElement("div");
+track.className = "gallery-track";
 
-        const count =
-            document.getElementById(
-                "galleryCount"
-            );
+slides.forEach(slide => {
+    track.appendChild(slide);
+});
 
+gallery.appendChild(track);
 
-        if (!gallery || !count) return;
+let index = 0;
+let moving = false;
 
 
-        /* =========================
-           TRACK
-        ========================= */
+/* =========================
+   TÍNH CHIỀU CAO ẢNH HIỆN TẠI
+========================= */
 
-        const slides =
-            Array.from(
-                gallery.children
-            );
+function updateHeight() {
 
-        const total =
-            slides.length;
+    const currentSlide = track.children[index];
 
+    if (!currentSlide) return;
 
-        const track =
-            document.createElement(
-                "div"
-            );
+    const img = currentSlide.querySelector("img");
 
-        track.className =
-            "gallery-track";
+    if (!img) return;
 
+    if (
+        img.complete &&
+        img.naturalWidth > 0 &&
+        img.naturalHeight > 0
+    ) {
 
-        slides.forEach(slide => {
-            track.appendChild(slide);
-        });
+        const galleryWidth = gallery.clientWidth;
 
+        const ratio =
+            img.naturalHeight /
+            img.naturalWidth;
 
-        gallery.appendChild(track);
+        const height =
+            galleryWidth * ratio;
 
+        gallery.style.height =
+            height + "px";
 
-        /* =========================
-           STATE
-        ========================= */
+    } else {
 
-        let index = 0;
+        img.addEventListener(
+            "load",
+            updateHeight,
+            { once: true }
+        );
+    }
+}
 
-        let moving = false;
 
-        let touchStartX = 0;
-        let touchStartY = 0;
+/* =========================
+   HIỂN THỊ ẢNH
+========================= */
 
-        let mouseStartX = 0;
-        let dragging = false;
+function render(animated = true) {
 
+    if (animated) {
 
-        /* =========================
-           COUNT
-        ========================= */
+        track.style.transition =
+            "transform 420ms cubic-bezier(.22,.61,.36,1)";
 
-        function updateCount() {
+        gallery.style.transition =
+            "height 420ms cubic-bezier(.22,.61,.36,1)";
 
-            count.textContent =
-                String(index + 1)
-                .padStart(2, "0")
-                + " / "
-                + String(total)
-                .padStart(2, "0");
+    } else {
 
-        }
+        track.style.transition = "none";
 
+        gallery.style.transition = "none";
+    }
 
-        /* =========================
-           RENDER
-        ========================= */
 
-        function render(
-            animate = true
-        ) {
+    track.style.transform =
+        `translateX(-${index * 100}%)`;
 
-            track.style.transition =
-                animate
-                    ? "transform 420ms cubic-bezier(.22,.61,.36,1)"
-                    : "none";
 
+    count.textContent =
+        `${String(index + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
 
-            track.style.transform =
-                `translateX(-${index * 100}%)`;
 
+    updateHeight();
+}
 
-            updateCount();
 
-        }
+/* =========================
+   CHUYỂN ẢNH
+========================= */
 
+function goTo(newIndex) {
 
-        /* =========================
-           GO TO
-        ========================= */
+    if (moving) return;
 
-        function goTo(newIndex) {
 
-            if (moving) return;
+    /* 1 → 7 */
 
+    if (newIndex < 0) {
 
-            /*
-                1 → 7
-            */
-
-            if (newIndex < 0) {
-
-                index = total - 1;
-
-                render(false);
-
-                return;
-            }
-
-
-            /*
-                7 → 1
-            */
-
-            if (newIndex >= total) {
-
-                index = 0;
-
-                render(false);
-
-                return;
-            }
-
-
-            index = newIndex;
-
-            moving = true;
-
-            render(true);
-
-
-            setTimeout(() => {
-
-                moving = false;
-
-            }, 430);
-
-        }
-
-
-        function next() {
-
-            goTo(index + 1);
-
-        }
-
-
-        function previous() {
-
-            goTo(index - 1);
-
-        }
-
-
-        /* =========================
-           INITIAL
-        ========================= */
+        index = total - 1;
 
         render(false);
 
+        return;
+    }
 
-        /* =========================
-           MOBILE
-        ========================= */
 
-        gallery.addEventListener(
-            "touchstart",
-            event => {
+    /* 7 → 1 */
 
-                if (moving) return;
+    if (newIndex >= total) {
 
+        index = 0;
 
-                const touch =
-                    event.touches[0];
+        render(false);
 
+        return;
+    }
 
-                touchStartX =
-                    touch.clientX;
 
-                touchStartY =
-                    touch.clientY;
+    index = newIndex;
 
-            },
-            {
-                passive: true
-            }
-        );
+    moving = true;
 
+    render(true);
 
-        gallery.addEventListener(
-            "touchend",
-            event => {
 
-                if (moving) return;
+    setTimeout(() => {
 
+        moving = false;
 
-                const touch =
-                    event.changedTouches[0];
+    }, 430);
+}
 
 
-                const dx =
-                    touch.clientX
-                    - touchStartX;
+/* =========================
+   NEXT / PREVIOUS
+========================= */
 
+function next() {
 
-                const dy =
-                    touch.clientY
-                    - touchStartY;
+    goTo(index + 1);
+}
 
 
-                /*
-                    Bỏ qua vuốt dọc
-                */
+function previous() {
 
-                if (
-                    Math.abs(dx) < 50 ||
-                    Math.abs(dx) < Math.abs(dy)
-                ) {
-                    return;
-                }
+    goTo(index - 1);
+}
 
 
-                /*
-                    TRÁI → TIẾP
-                    PHẢI → TRƯỚC
-                */
+/* =========================
+   ĐIỆN THOẠI — SWIPE
+========================= */
 
-                if (dx < 0) {
+let touchStartX = 0;
+let touchStartY = 0;
 
-                    next();
 
-                } else {
+gallery.addEventListener(
+    "touchstart",
+    (e) => {
 
-                    previous();
+        touchStartX =
+            e.touches[0].clientX;
 
-                }
+        touchStartY =
+            e.touches[0].clientY;
 
-            },
-            {
-                passive: true
-            }
-        );
+    },
+    { passive: true }
+);
 
 
-        /* =========================
-           PC MOUSE
-        ========================= */
+gallery.addEventListener(
+    "touchend",
+    (e) => {
 
-        gallery.addEventListener(
-            "mousedown",
-            event => {
+        const touchEndX =
+            e.changedTouches[0].clientX;
 
-                if (
-                    event.button !== 0 ||
-                    moving
-                ) {
-                    return;
-                }
+        const touchEndY =
+            e.changedTouches[0].clientY;
 
 
-                dragging = true;
+        const dx =
+            touchEndX - touchStartX;
 
-                mouseStartX =
-                    event.clientX;
+        const dy =
+            touchEndY - touchStartY;
 
 
-                gallery.classList.add(
-                    "is-dragging"
-                );
+        /* Không đủ xa */
 
+        if (Math.abs(dx) < 50) return;
 
-                event.preventDefault();
 
-            }
-        );
+        /* Người dùng đang vuốt dọc */
 
+        if (Math.abs(dx) < Math.abs(dy)) {
+            return;
+        }
 
-        window.addEventListener(
-            "mouseup",
-            event => {
 
-                if (!dragging) return;
+        /* Vuốt trái → ảnh tiếp */
 
+        if (dx < 0) {
 
-                dragging = false;
+            next();
 
+        }
 
-                gallery.classList.remove(
-                    "is-dragging"
-                );
+        /* Vuốt phải → ảnh trước */
 
+        else {
 
-                const dx =
-                    event.clientX
-                    - mouseStartX;
+            previous();
 
+        }
 
-                if (Math.abs(dx) < 50) {
-                    return;
-                }
+    },
+    { passive: true }
+);
 
 
-                /*
-                    TRÁI → TIẾP
-                    PHẢI → TRƯỚC
-                */
+/* =========================
+   PC — KÉO CHUỘT
+========================= */
 
-                if (dx < 0) {
+let mouseStartX = 0;
+let dragging = false;
 
-                    next();
 
-                } else {
+gallery.addEventListener(
+    "mousedown",
+    (e) => {
 
-                    previous();
+        mouseStartX =
+            e.clientX;
 
-                }
+        dragging = true;
 
-            }
-        );
+        gallery.style.cursor =
+            "grabbing";
 
+    }
+);
 
-        /* =========================
-           PREVENT IMAGE DRAG
-        ========================= */
 
-        gallery.addEventListener(
-            "dragstart",
-            event => {
-                event.preventDefault();
-            }
-        );
+gallery.addEventListener(
+    "mouseup",
+    (e) => {
 
+        if (!dragging) return;
 
-        /* =========================
-           KEYBOARD
-        ========================= */
 
-        gallery.setAttribute(
-            "tabindex",
-            "0"
-        );
+        const dx =
+            e.clientX - mouseStartX;
 
 
-        gallery.addEventListener(
-            "keydown",
-            event => {
+        dragging = false;
 
-                if (
-                    event.key === "ArrowLeft"
-                ) {
+        gallery.style.cursor =
+            "grab";
 
-                    event.preventDefault();
 
-                    next();
+        if (Math.abs(dx) < 50) {
+            return;
+        }
 
-                }
 
+        /* Kéo sang trái */
 
-                if (
-                    event.key === "ArrowRight"
-                ) {
+        if (dx < 0) {
 
-                    event.preventDefault();
+            next();
 
-                    previous();
+        }
 
-                }
+        /* Kéo sang phải */
 
-            }
-        );
+        else {
 
+            previous();
 
-        /* =========================
-           RESIZE
-        ========================= */
+        }
 
-        window.addEventListener(
-            "resize",
-            () => {
+    }
+);
 
-                render(false);
 
-            }
-        );
+gallery.addEventListener(
+    "mouseleave",
+    () => {
 
+        dragging = false;
 
-    })();
+        gallery.style.cursor =
+            "grab";
 
-    </script>
+    }
+);
 
+
+/* =========================
+   BÀN PHÍM
+========================= */
+
+document.addEventListener(
+    "keydown",
+    (e) => {
+
+        if (e.key === "ArrowLeft") {
+
+            previous();
+
+        }
+
+        if (e.key === "ArrowRight") {
+
+            next();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   LOAD TRANG
+========================= */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        render(false);
+
+    }
+);
+
+
+/* =========================
+   RESIZE
+========================= */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        updateHeight();
+
+    }
+);
+</script>
 </body>
 </html>

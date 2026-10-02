@@ -1743,7 +1743,8 @@
 
                 <form
                     class="booking-form"
-                    action="ACTION_FORM_CUA_BAN"
+                    id="bookingForm"
+                    action="https://formsubmit.co/ajax/paccankim3@gmail.com"
                     method="POST"
                 >
 
@@ -1828,12 +1829,20 @@
                     </div>
 
 
+                    <input type="hidden" name="_subject" value="W/M.TATTOO — New Booking Inquiry">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_captcha" value="true">
+                    <input type="hidden" name="_url" value="https://watermelon-tattoo.github.io/MyWebsite/">
+
                     <button
                         type="submit"
                         class="submit-btn"
+                        id="bookingSubmit"
                     >
                         Send Inquiry
                     </button>
+
+                    <p id="bookingStatus" style="margin-top:14px;font-size:11px;line-height:1.6;color:#777;"></p>
 
                 </form>
 
@@ -1926,6 +1935,77 @@
             SUPABASE_URL,
             SUPABASE_PUBLISHABLE_KEY
         );
+
+        /* =========================
+           BOOKING — SAVE + EMAIL
+        ========================= */
+        const bookingForm = document.getElementById("bookingForm");
+        const bookingSubmit = document.getElementById("bookingSubmit");
+        const bookingStatus = document.getElementById("bookingStatus");
+
+        if (bookingForm) {
+            bookingForm.addEventListener("submit", async (event) => {
+                event.preventDefault();
+
+                const formData = new FormData(bookingForm);
+                const booking = {
+                    name: String(formData.get("name") || "").trim(),
+                    contact: String(formData.get("contact") || "").trim(),
+                    placement: String(formData.get("placement") || "").trim(),
+                    size: String(formData.get("size") || "").trim(),
+                    message: String(formData.get("message") || "").trim()
+                };
+
+                if (!booking.name || !booking.contact || !booking.message) {
+                    bookingStatus.textContent = "Please fill in all required fields.";
+                    bookingStatus.style.color = "#aaa";
+                    return;
+                }
+
+                bookingSubmit.disabled = true;
+                bookingSubmit.textContent = "Sending...";
+                bookingStatus.textContent = "";
+
+                try {
+                    const { error: dbError } = await supabaseClient
+                        .from("bookings")
+                        .insert([booking]);
+
+                    if (dbError) throw dbError;
+
+                    const emailResponse = await fetch(bookingForm.action, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify({
+                            ...booking,
+                            _subject: "W/M.TATTOO — New Booking Inquiry",
+                            _template: "table",
+                            _captcha: "true",
+                            _url: "https://watermelon-tattoo.github.io/MyWebsite/"
+                        })
+                    });
+
+                    const emailResult = await emailResponse.json().catch(() => ({}));
+                    if (!emailResponse.ok || emailResult.success === false) {
+                        throw new Error("Email notification failed");
+                    }
+
+                    bookingForm.reset();
+                    bookingStatus.textContent = "Inquiry sent successfully. We will get back to you soon.";
+                    bookingStatus.style.color = "#aaa";
+                } catch (error) {
+                    console.error("Booking submission error:", error);
+                    bookingStatus.textContent = "Something went wrong. Please try again or contact us directly.";
+                    bookingStatus.style.color = "#aaa";
+                } finally {
+                    bookingSubmit.disabled = false;
+                    bookingSubmit.textContent = "Send Inquiry";
+                }
+            });
+        }
 
         const reviewForm = document.getElementById("reviewForm");
         const reviewName = document.getElementById("reviewName");
